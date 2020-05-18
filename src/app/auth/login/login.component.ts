@@ -12,7 +12,7 @@ import { AuthState } from '../reducers';
 
 
 @Component({
-  selector: "login",
+  selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })

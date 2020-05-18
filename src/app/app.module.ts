@@ -1,3 +1,4 @@
+import { AuthGuard } from './auth/auth.guard';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
@@ -11,7 +12,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {HttpClientModule} from '@angular/common/http';
 
-import {RouterModule, Routes} from '@angular/router';
+import { RouterModule, Routes, CanActivate } from '@angular/router';
 import {AuthModule} from './auth/auth.module';
 import {StoreModule} from '@ngrx/store';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
@@ -27,7 +28,8 @@ import { reducers, metaReducers } from './reducers';
 const routes: Routes = [
   {
     path: 'courses',
-    loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule)
+    loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule),
+    canActivate: [AuthGuard],
   },
   {
     path: '**',
