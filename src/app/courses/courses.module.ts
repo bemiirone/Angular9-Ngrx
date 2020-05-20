@@ -1,3 +1,4 @@
+import { LessonEntityService } from './services/lesson.entity.service';
 import { CoursesResolver } from './services/course.resolver';
 import { CourseEntityService } from './services/course.entity.service';
 import { NgModule } from '@angular/core';
@@ -57,6 +58,9 @@ const entityMetadata: EntityMetadataMap = {
       optimisticUpdate: true
     },
   },
+  Lesson: {
+    sortComparer: compareLessons
+  }
 };
 
 @NgModule({
@@ -97,6 +101,7 @@ const entityMetadata: EntityMetadataMap = {
     CourseEntityService,
     CoursesResolver,
     CoursesDataService,
+    LessonEntityService,
     ],
 })
 export class CoursesModule {
