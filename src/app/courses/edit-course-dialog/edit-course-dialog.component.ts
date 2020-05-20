@@ -1,3 +1,4 @@
+import { CourseEntityService } from './../services/course.entity.service';
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Course} from '../model/course';
@@ -26,7 +27,7 @@ export class EditCourseDialogComponent {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditCourseDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data,
-    private coursesService: CoursesHttpService) {
+    private coursesService: CourseEntityService) {
 
     this.dialogTitle = data.dialogTitle;
     this.course = data.course;
@@ -39,11 +40,11 @@ export class EditCourseDialogComponent {
       promo: ['', []]
     };
 
-    if (this.mode == 'update') {
+    if (this.mode === 'update') {
       this.form = this.fb.group(formControls);
       this.form.patchValue({...data.course});
     }
-    else if (this.mode == 'create') {
+    else if (this.mode === 'create') {
       this.form = this.fb.group({
         ...formControls,
         url: ['', Validators.required],
@@ -63,12 +64,15 @@ export class EditCourseDialogComponent {
       ...this.form.value
     };
 
-    this.coursesService.saveCourse(course.id, course)
-      .subscribe(
-        () => this.dialogRef.close()
-      )
-
-
+    if (this.mode === 'update') {
+      this.coursesService.update(course);
+      this.onClose();
+    } else if (this.mode === 'create') {
+      this.coursesService.add(course)
+      .subscribe(newCourse => {
+        this.onClose();
+      });
+    }
   }
 
 
