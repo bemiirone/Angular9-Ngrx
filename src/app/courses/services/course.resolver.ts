@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap, filter, first } from 'rxjs/operators';
 
 @Injectable()
 export class CoursesResolver implements Resolve<boolean> {
@@ -16,6 +16,14 @@ export class CoursesResolver implements Resolve<boolean> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> {
-    return this.coursesService.getAll().pipe(map((courses) => !!courses));
+    return this.coursesService.loaded$.pipe(
+      tap(loaded => {
+        if (!loaded) {
+          this.coursesService.getAll();
+        }
+      }),
+      filter(loaded => !!loaded),
+      first()
+    );
   }
 }
